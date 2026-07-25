@@ -20,6 +20,17 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password } = req.body;
 
+    // Validate input
+    if (!name || !email || !password) {
+      res.status(400).json({ success: false, message: 'Please provide all required fields' });
+      return;
+    }
+
+    if (password.length < 6) {
+      res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
+      return;
+    }
+
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -43,6 +54,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       },
     });
   } catch (error) {
+    console.error('Register error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };

@@ -35,11 +35,19 @@ export default function RegisterPage() {
       return;
     }
 
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       await register(formData.name, formData.email, formData.password);
       router.push('/');
-    } catch {
-      setError('Registration failed. Please try again.');
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Registration failed. Please try again.';
+      setError(errorMessage);
       setIsLoading(false);
     }
   };

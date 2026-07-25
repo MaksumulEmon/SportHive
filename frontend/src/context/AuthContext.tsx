@@ -60,8 +60,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: response.data.name,
         email: response.data.email,
       });
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Registration failed');
     } finally {
       setIsLoading(false);
     }
