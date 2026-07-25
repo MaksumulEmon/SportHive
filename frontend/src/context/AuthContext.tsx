@@ -1,12 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { authApi, User } from '@/lib/api/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -18,36 +13,38 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-function getInitialUser(): User | null {
-  if (typeof window === 'undefined') return null;
-  const token = localStorage.getItem('token');
-  if (token) {
-    return {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-    };
-  }
-  return null;
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => getInitialUser());
-  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await authApi.getMe();
+          setUser(response.data);
+        } catch {
+          localStorage.removeItem('token');
+        }
+      }
+      setIsLoading(false);
+    };
+    loadUser();
+  }, []);
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // API call will be implemented with backend
-      console.log('Login:', email, password);
+      const response = await authApi.login(email, password);
+      localStorage.setItem('token', response.data.token);
       setUser({
-        id: '1',
-        name: 'John Doe',
-        email,
+        id: response.data.id,
+        name: response.data.name,
+        email: response.data.email,
       });
-      localStorage.setItem('token', 'mock-token');
-    } catch {
-      throw new Error('Invalid credentials');
+    } catch (error) {
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -56,16 +53,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (name: string, email: string, password: string) => {
     setIsLoading(true);
     try {
-      // API call will be implemented with backend
-      console.log('Register:', name, email, password);
+      const response = await authApi.register(name, email, password);
+      localStorage.setItem('token', response.data.token);
       setUser({
-        id: '1',
-        name,
-        email,
+        id: response.data.id,
+        name: response.data.name,
+        email: response.data.email,
       });
-      localStorage.setItem('token', 'mock-token');
-    } catch {
-      throw new Error('Registration failed');
+    } catch (error) {
+      throw error;
     } finally {
       setIsLoading(false);
     }
