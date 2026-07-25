@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -22,10 +23,18 @@ const dashboardLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
 
-  const isAuthenticated = false;
+  const isAuthenticated = !!user;
 
   const links = isAuthenticated ? dashboardLinks : navLinks;
+
+  const handleLogout = () => {
+    logout();
+    setIsOpen(false);
+    router.push('/');
+  };
 
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 bg-white shadow-md">
@@ -64,7 +73,10 @@ export default function Navbar() {
                 >
                   Profile
                 </Link>
-                <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+                <button
+                  onClick={handleLogout}
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                >
                   Logout
                 </button>
               </div>
@@ -143,7 +155,7 @@ export default function Navbar() {
                   Profile
                 </Link>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleLogout}
                   className="mt-2 w-full rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700"
                 >
                   Logout
