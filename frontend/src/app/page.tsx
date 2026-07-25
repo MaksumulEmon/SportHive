@@ -4,6 +4,7 @@ import FeaturedEvents from '@/components/home/FeaturedEvents';
 import CategoriesSection from '@/components/home/CategoriesSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import StatsSection from '@/components/home/StatsSection';
+import TestimonialsSection from '@/components/home/TestimonialsSection';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <CategoriesSection />
       <FeaturesSection />
       <StatsSection />
+      <TestimonialsSection />
     </MainLayout>
   );
 }
