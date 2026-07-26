@@ -143,11 +143,11 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => {
-              setFormData({ email: 'demo@sportshive.com', password: 'demo123' });
+              setFormData({ email: 'emon@sportshive.com', password: 'emon123' });
             }}
             className="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
           >
-            Demo User (demo@sportshive.com / demo123)
+            Demo User (emon@sportshive.com / emon123)
           </button>
         </form>
       </div>

@@ -5,9 +5,9 @@ import User from './models/User';
 dotenv.config();
 
 const demoUser = {
-  name: 'Demo User',
-  email: 'demo@sportshive.com',
-  password: 'demo123',
+  name: 'Emon User',
+  email: 'emon@sportshive.com',
+  password: 'emon123',
   role: 'admin' as const,
 };
 
