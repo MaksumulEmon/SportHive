@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/db';
 import authRoutes from './routes/authRoutes';
 import eventRoutes from './routes/eventRoutes';
+import adminRoutes from './routes/adminRoutes';
+import purchaseRoutes from './routes/purchaseRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -29,6 +31,8 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/purchases', purchaseRoutes);
 
 // Health check endpoint
 app.get('/api/health', (_req, res) => {

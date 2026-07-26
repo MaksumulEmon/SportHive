@@ -18,6 +18,17 @@ const dashboardLinks = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/events/add', label: 'Add Event' },
   { href: '/events/manage', label: 'Manage Events' },
+  { href: '/purchases', label: 'My Purchases' },
+];
+
+const adminLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/events', label: 'Explore Events' },
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/admin', label: 'Admin' },
+  { href: '/events/add', label: 'Add Event' },
+  { href: '/events/manage', label: 'Manage Events' },
+  { href: '/purchases', label: 'My Purchases' },
 ];
 
 export default function Navbar() {
@@ -28,7 +39,7 @@ export default function Navbar() {
 
   const isAuthenticated = !!user;
 
-  const links = isAuthenticated ? dashboardLinks : navLinks;
+  const links = user?.role === 'admin' ? adminLinks : isAuthenticated ? dashboardLinks : navLinks;
 
   const handleLogout = () => {
     logout();

@@ -4,14 +4,22 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { eventsApi, Event } from '@/lib/api/events';
+import { purchasesApi } from '@/lib/api/purchases';
+import { useAuth } from '@/context/AuthContext';
 import MainLayout from '@/components/layout/MainLayout';
 
 export default function EventDetailsPage() {
   const params = useParams();
   const router = useRouter();
+  const { user } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPurchased, setIsPurchased] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+
+  const isOwner = user && event && user.id === event.userId;
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -26,6 +34,35 @@ export default function EventDetailsPage() {
     };
     fetchEvent();
   }, [params.id]);
+
+  useEffect(() => {
+    const checkPurchaseStatus = async () => {
+      if (!user || !event) return;
+      try {
+        const response = await purchasesApi.checkPurchase(event._id);
+        setIsPurchased(response.data.purchased);
+      } catch {
+        console.error('Failed to check purchase status');
+      }
+    };
+    checkPurchaseStatus();
+  }, [user, event]);
+
+  const handlePurchase = async () => {
+    if (!user || !event) return;
+    setIsPurchasing(true);
+    try {
+      await purchasesApi.purchaseEvent(event._id);
+      setIsPurchased(true);
+      setPurchaseSuccess(true);
+      setTimeout(() => setPurchaseSuccess(false), 3000);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to register';
+      alert(errorMessage);
+    } finally {
+      setIsPurchasing(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -226,9 +263,30 @@ export default function EventDetailsPage() {
                   </div>
                 </div>
 
-                <button className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                  Register Now
-                </button>
+                {/* Purchase Button */}
+                {purchaseSuccess && (
+                  <div className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600">
+                    Successfully registered for this event!
+                  </div>
+                )}
+
+                {isOwner ? (
+                  <div className="w-full rounded-lg bg-gray-100 px-4 py-3 text-center text-sm font-semibold text-gray-600">
+                    You are the organizer
+                  </div>
+                ) : isPurchased ? (
+                  <div className="w-full rounded-lg bg-green-50 px-4 py-3 text-center text-sm font-semibold text-green-600">
+                    Already Registered
+                  </div>
+                ) : (
+                  <button
+                    onClick={handlePurchase}
+                    disabled={isPurchasing || !user}
+                    className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isPurchasing ? 'Registering...' : user ? 'Register Now' : 'Login to Register'}
+                  </button>
+                )}
               </div>
 
               {/* Venue Card */}

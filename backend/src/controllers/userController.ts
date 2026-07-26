@@ -38,8 +38,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    // Check if this is the first user (make them admin)
+    const userCount = await User.countDocuments();
+    const role = userCount === 0 ? 'admin' : 'user';
+
     // Create user
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, role });
 
     // Generate token
     const token = generateToken(String(user._id));
@@ -50,6 +54,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         token,
       },
     });
@@ -89,6 +94,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         token,
       },
     });

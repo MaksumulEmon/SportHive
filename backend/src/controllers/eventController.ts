@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Event from '../models/Event';
+import User from '../models/User';
 
 // @desc    Get all events
 // @route   GET /api/events
@@ -100,8 +101,11 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    // Check if user owns event
-    if (event.userId.toString() !== req.user?.id) {
+    // Check if user owns event or is admin
+    const user = await User.findById(req.user?.id);
+    const isAdmin = user?.role === 'admin';
+
+    if (event.userId.toString() !== req.user?.id && !isAdmin) {
       res.status(403).json({ success: false, message: 'Not authorized' });
       return;
     }
@@ -128,8 +132,11 @@ export const deleteEvent = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    // Check if user owns event
-    if (event.userId.toString() !== req.user?.id) {
+    // Check if user owns event or is admin
+    const user = await User.findById(req.user?.id);
+    const isAdmin = user?.role === 'admin';
+
+    if (event.userId.toString() !== req.user?.id && !isAdmin) {
       res.status(403).json({ success: false, message: 'Not authorized' });
       return;
     }

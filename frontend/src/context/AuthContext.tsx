@@ -42,6 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: response.data.id,
         name: response.data.name,
         email: response.data.email,
+        role: response.data.role,
       });
     } catch (error) {
       throw error;
@@ -59,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: response.data.id,
         name: response.data.name,
         email: response.data.email,
+        role: response.data.role,
       });
     } catch (error: unknown) {
       if (error instanceof Error) {
