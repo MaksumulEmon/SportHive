@@ -2,6 +2,13 @@ import { Request, Response } from 'express';
 import Event from '../models/Event';
 import User from '../models/User';
 
+// Extend Request to include user
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+  };
+}
+
 // @desc    Get all events
 // @route   GET /api/events
 // @access  Public
@@ -80,7 +87,7 @@ export const getEvent = async (req: Request, res: Response): Promise<void> => {
 // @desc    Create event
 // @route   POST /api/events
 // @access  Private
-export const createEvent = async (req: Request, res: Response): Promise<void> => {
+export const createEvent = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     req.body.userId = req.user?.id;
     const event = await Event.create(req.body);
@@ -93,7 +100,7 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
 // @desc    Update event
 // @route   PUT /api/events/:id
 // @access  Private
-export const updateEvent = async (req: Request, res: Response): Promise<void> => {
+export const updateEvent = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     let event = await Event.findById(req.params.id);
     if (!event) {
@@ -124,7 +131,7 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
 // @desc    Delete event
 // @route   DELETE /api/events/:id
 // @access  Private
-export const deleteEvent = async (req: Request, res: Response): Promise<void> => {
+export const deleteEvent = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const event = await Event.findById(req.params.id);
     if (!event) {
@@ -152,7 +159,7 @@ export const deleteEvent = async (req: Request, res: Response): Promise<void> =>
 // @desc    Get user events
 // @route   GET /api/events/user/me
 // @access  Private
-export const getUserEvents = async (req: Request, res: Response): Promise<void> => {
+export const getUserEvents = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const events = await Event.find({ userId: req.user?.id }).sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: events });

@@ -2,8 +2,15 @@ import { Request, Response } from 'express';
 import Purchase from '../models/Purchase';
 import Event from '../models/Event';
 
+// Extend Request to include user
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+  };
+}
+
 // Purchase/register for an event
-export const purchaseEvent = async (req: Request, res: Response): Promise<void> => {
+export const purchaseEvent = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { eventId } = req.body;
     const userId = req.user?.id;
@@ -50,7 +57,7 @@ export const purchaseEvent = async (req: Request, res: Response): Promise<void> 
 };
 
 // Get user's purchases
-export const getUserPurchases = async (req: Request, res: Response): Promise<void> => {
+export const getUserPurchases = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const purchases = await Purchase.find({ userId: req.user?.id })
       .populate('eventId')
@@ -62,7 +69,7 @@ export const getUserPurchases = async (req: Request, res: Response): Promise<voi
 };
 
 // Check if user has purchased an event
-export const checkPurchase = async (req: Request, res: Response): Promise<void> => {
+export const checkPurchase = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { eventId } = req.params;
     const purchase = await Purchase.findOne({ userId: req.user?.id, eventId });
@@ -76,7 +83,7 @@ export const checkPurchase = async (req: Request, res: Response): Promise<void> 
 };
 
 // Cancel a purchase
-export const cancelPurchase = async (req: Request, res: Response): Promise<void> => {
+export const cancelPurchase = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const purchase = await Purchase.findOne({
       _id: req.params.id,

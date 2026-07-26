@@ -34,6 +34,11 @@ app.use('/api/events', eventRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/purchases', purchaseRoutes);
 
+// Root route
+app.get('/', (_req, res) => {
+  res.json({ message: 'Welcome to SportHive API' });
+});
+
 // Health check endpoint
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'OK', message: 'SportHive API is running' });
