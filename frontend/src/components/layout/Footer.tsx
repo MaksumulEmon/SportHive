@@ -3,7 +3,7 @@ import Link from 'next/link';
 const footerLinks = {
   product: [
     { href: '/events', label: 'Explore Events' },
-    { href: '/events/add', label: 'Add Event' },
+    { href: '/events/add', label: 'Add Ground' },
     { href: '/dashboard', label: 'Dashboard' },
   ],
   company: [

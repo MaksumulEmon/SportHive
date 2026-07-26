@@ -30,7 +30,7 @@ const features = [
     ),
   },
   {
-    title: 'Create Events',
+    title: 'Create Ground',
     description:
       'Host your own sports events with our easy-to-use event creation tools. Manage participants effortlessly.',
     icon: (

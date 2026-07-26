@@ -81,7 +81,7 @@ export default function ProfilePage() {
               href="/events/add"
               className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md"
             >
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">Add Event</h3>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">Add Ground</h3>
               <p className="text-sm text-gray-600">Create a new sports event</p>
             </Link>
             <Link

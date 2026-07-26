@@ -32,7 +32,7 @@ export default function EventsPage() {
     category: '',
     sort: 'newest',
     page: 1,
-    limit: 9,
+    limit: 6,
   });
 
   useEffect(() => {

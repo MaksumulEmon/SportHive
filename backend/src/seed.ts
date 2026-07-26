@@ -8,7 +8,7 @@ const demoUser = {
   name: 'Emon User',
   email: 'emon@sportshive.com',
   password: 'emon123',
-  role: 'admin' as const,
+  role: 'user' as const,
 };
 
 async function seed() {
