@@ -16,7 +16,7 @@ const dashboardLinks = [
   { href: '/', label: 'Home' },
   { href: '/events', label: 'Explore Events' },
   { href: '/dashboard', label: 'Dashboard' },
-  { href: '/events/add', label: 'Add Event' },
+  { href: '/events/add', label: 'Add Ground' },
   { href: '/events/manage', label: 'Manage Events' },
   { href: '/purchases', label: 'My Purchases' },
 ];

@@ -5,9 +5,12 @@ A modern Sports Event Management Platform built with Next.js, Express.js, and Mo
 ## Features
 
 - **User Authentication** - Register, login, and JWT-based session management
+- **Admin System** - First registered user becomes admin with full access
 - **Event Management** - Create, read, update, and delete sports events
 - **Event Discovery** - Search, filter by category, and sort events
+- **Purchase System** - Register for events with ownership restrictions
 - **User Dashboard** - Personalized dashboard with statistics and charts
+- **Admin Dashboard** - Manage users, events, and view statistics
 - **Responsive Design** - Works on mobile, tablet, and desktop
 - **RESTful API** - Full CRUD operations with proper error handling
 
@@ -111,7 +114,7 @@ npm run dev
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/register` - Register a new user (first user becomes admin)
 - `POST /api/auth/login` - Login user
 - `GET /api/auth/me` - Get current user (protected)
 
@@ -119,22 +122,45 @@ npm run dev
 - `GET /api/events` - Get all events (with filters)
 - `GET /api/events/:id` - Get single event
 - `POST /api/events` - Create event (protected)
-- `PUT /api/events/:id` - Update event (protected)
-- `DELETE /api/events/:id` - Delete event (protected)
+- `PUT /api/events/:id` - Update event (protected, owner or admin)
+- `DELETE /api/events/:id` - Delete event (protected, owner or admin)
 - `GET /api/events/user/me` - Get user's events (protected)
+
+### Purchases
+- `POST /api/purchases` - Purchase/register for event (protected)
+- `GET /api/purchases/my` - Get user's purchases (protected)
+- `GET /api/purchases/check/:eventId` - Check if purchased (protected)
+- `DELETE /api/purchases/:id` - Cancel purchase (protected)
+
+### Admin (Admin only)
+- `GET /api/admin/users` - List all users
+- `DELETE /api/admin/users/:id` - Delete user
+- `GET /api/admin/events` - List all events
+- `GET /api/admin/stats` - Dashboard statistics
+
+### Health Check
+- `GET /api/health` - Server health check
 
 ## Pages
 
 - `/` - Homepage with hero, featured events, categories
 - `/login` - User login
 - `/register` - User registration
+- `/profile` - User profile
 - `/dashboard` - User dashboard with stats and charts
 - `/events` - Explore all events with search and filters
 - `/events/add` - Create new event (protected)
 - `/events/manage` - Manage user's events (protected)
-- `/events/[id]` - Event details
+- `/events/[id]` - Event details with purchase option
+- `/purchases` - My purchases/registrations (protected)
+- `/admin` - Admin dashboard (admin only)
+- `/admin/users` - User management (admin only)
+- `/admin/events` - Event management (admin only)
 - `/about` - About SportHive
 - `/contact` - Contact form
+- `/help` - Help & Support
+- `/privacy` - Privacy Policy
+- `/terms` - Terms & Conditions
 
 ## License
 
